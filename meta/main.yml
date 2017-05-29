@@ -1,0 +1,15 @@
+galaxy_info:
+  author: Ioannis Tambouras
+  description: configuration of postgresql roles, databases, extensions, privs
+  company: Akron Inc
+  license: "MIT"
+  min_ansible_version: 1.2
+
+  #galaxy_tags: 
+  # - postgresql
+  # - configuration
+    # Maximum 20 tags per role.
+
+allow_duplicates: no
+dependencies: []
+#- { role: pg_initdb }
