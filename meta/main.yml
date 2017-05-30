@@ -9,7 +9,11 @@ galaxy_info:
    - configuration
   platforms:
       - name: Debian 
+        versions:
+            - stretch
       - name: FreeBSD
+        versions:
+            - 11.0
 
 
 allow_duplicates: no
