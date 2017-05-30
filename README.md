@@ -1,4 +1,4 @@
-Role Name
+Role ioannis1.pg_config
 =========
 
 Configure a postgres cluster that is already running, and ensures roles 'postgre', 'ioannis', and 'nagios' exist and can connect via md5 authendication. Passwords for  role 'postgres' is (optionally) configurable, passwords for the other roles are hardcoded. Some databases and privs are created and set along with some extensions. Cluster configuration
@@ -59,5 +59,5 @@ BSD
 
 Author Information
 ------------------
+Ioannis Tambouras <ioannis@akroninc.net>
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
