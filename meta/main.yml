@@ -7,7 +7,14 @@ galaxy_info:
   galaxy_tags: 
    - postgresql
    - configuration
-   # Maximum 20 tags per role.
+  platforms:
+      - name: Debian 
+        versions:
+            - 4.9.18
+      - name: FreeBSD
+        versions:
+            - 11.0
+
 
 allow_duplicates: no
 dependencies: []
