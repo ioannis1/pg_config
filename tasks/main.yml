@@ -43,8 +43,8 @@
     postgresql_user:  name=nagios    port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost" password="md5{{'silver''nagios'|hash('md5')}}"  encrypted=yes  ssl_mode=prefer
 
 #################################### config_files ##################################################################
-  - name:       pg_*.conf
-    copy:       src="{{ item }}"  dest="{{ cluster}}/"  owner=postgres  mode=0640
+  - name:            pg_*.conf
+    copy:            src="{{ item }}"  dest="{{ cluster}}/"  owner=postgres  mode=0640
     with_fileglob:
        - pg_*.conf
 ################################## template1   ######################################################################
@@ -59,18 +59,30 @@
     postgresql_db: name="ioannis" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost"
 
 ################################# Extensions  #######################################################################
-  - name:            ext pgtap
-    postgresql_ext:  name=pgtap  db=ioannis port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost"
+  - name:            ext for database ioannis
+    postgresql_ext:  name={{item}}  db=ioannis port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost"
+    with_items:
+         - pgtap
+           #- pg_stat_statements #- pg_qualstats #- pg_stat_kcache
 
-    #pg_stat_statements pg_qualstats  pg_stat_kcache
 
 ################################ Privs     ###########################################################################
-  - name:  database privs
-    postgresql_privs:   db="postgres"  privs=CONNECT  type=database  roles="nagios,ioannis" port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost"
+  - name:  privs for database postgres 
+    postgresql_privs:   db="postgres"  privs=CONNECT  type=database  roles="{{item}}" port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost"
+    with_items:
+        - nagios
+        - ioannis
 
-  - postgresql_privs:   db="postgres" grant_option="no"  privs="INSERT,UPDATE"  type="table" obj="ALL_IN_SCHEMA"  schema="public" roles="nagios"  port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost"
+  - postgresql_privs:   db="postgres" grant_option="no"  privs="INSERT,UPDATE"  type="table" obj="ALL_IN_SCHEMA"  schema="public" roles="{{item}}"  port="{{ pport }}" login_password="{{postgres_passwd}}"  login_host="localhost"
+    with_items:
+        - nagios
 
-    # ensure postmaster is stopped (but only if tis script started it).
+################################## Reload, then Stop postmaster unless user wanted otherwise
+  - name:            reload {{ cluster}} 
+    shell:          "pg_ctl -D {{ cluster }} reload"
+    environment:  
+          PATH:     "{{ ansible_env.PATH }}:{{ ansible_env.HOME }}/dist-pg/bin:/usr/bin"
+
   - name:            keep postmaster running ?
     when:            not (keep_running)
     ignore_errors:   yes
