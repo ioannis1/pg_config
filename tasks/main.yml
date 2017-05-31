@@ -5,7 +5,6 @@
 #    - cluster has been initialized and pg_hda allows role 'postres'to connect 
 #    - we will not configure osx hosts because psycopg2 might be hard to install through macports
 # Post conditions:
-#   - postmaster might be running, depending on variable  "run_cluser" in ../default/meta.yml
 #   - pg_hba.conf is updated
 #   - created postgres roles with passwords
 #   - added to template1
@@ -16,14 +15,17 @@
     when:           not (ansible_user_id == "postgres")
     fail:           msg="Detected ansible_user_id='{{ ansible_user_id}}'. This role must run as 'postgres'"
 
-  - name:           fail if we are insalling to osx hosts
-    when:           ansible_os_family == "Darwin"
-    fail:           msg="Detected ansible_os_family='{{ ansible_os_family}}'. We won't configure osx hosts."
-
   - name:           ensure postmaster is running 
     shell:          "pg_ctl -D {{ cluster }} start"
+    ignore_errors:  yes
     environment:  
       PATH:        "{{ ansible_env.HOME }}/dist-pg/bin:{{ ansible_env.PATH}}:/usr/bin"
+
+  - name:          extra packages
+    include:       "{{ ansible_os_family }}.yml"
+    become_user:   root
+    become:        yes
+
 ############################### Roles  ##############################################################################
 
   # need it for next step

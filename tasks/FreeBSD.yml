@@ -1,0 +1,2 @@
+   - name: py27-psycopg2
+     pkgng:  name="py27-psycopg2"   autoremove=yes cached=yes state=present

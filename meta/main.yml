@@ -14,6 +14,9 @@ galaxy_info:
       - name: FreeBSD
         versions:
             - 11.0
+      - name: MacOSX
+        versions:
+            - 10.11
 
 
 allow_duplicates: no
