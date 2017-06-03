@@ -38,7 +38,7 @@ keep_running:        True
 where,
 
 cluster             The Unix $PGDATA directory.
-pport               Port where postgres accepts connection (note the double 'p' in pport).
+port                Port where postgres accepts connection.
 postgres_passwd     Password for role postgres needed to login to the database and make changes. If this
                     variable is not provided, it is expected that the auth method for the cluster is either 'trust'
                     or user 'postgres' is able to successfully login without password, if not, no modifictions are 

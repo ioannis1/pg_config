@@ -1,6 +1,6 @@
 ---
 cluster:                ~postgres/green
-pport:                  5434
+port:                   5432
 keep_running:           True
 repl_and_pg_roles:      True
 
