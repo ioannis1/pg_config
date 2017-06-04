@@ -38,6 +38,8 @@ keep_running:        True
 pg_hba:              True
 allow_trust:         False
 
+
+
 where,
 
 cluster             The Unix $PGDATA directory.
@@ -69,6 +71,8 @@ pg_hba             Creates a new pg_hba.conf from knowledge gathered from other 
 
 allow_trust        Don't comment out 'trust' entries in pg_hba.conf (see 'pg_hba' option), thus, we will allow 
                    'trust' connections.
+
+
                    
 
 

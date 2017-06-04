@@ -6,6 +6,8 @@ repl_and_pg_roles:      True
 pg_hba:                 True
 allow_trust:            True
 
+
+
 users:
     - { name: ioannis,     passwd: "{{postgres_passwd}}", attr: createdb    }
     - { name: nagios,      passwd: "{{postgres_passwd}}"                    }
