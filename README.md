@@ -36,15 +36,19 @@ postgres_passwd:     No default exists for this variable.
 repl_and_pg_roles:   True
 keep_running:        True
 pg_hba:              True
+allow_trust:         False
 
 where,
 
 cluster             The Unix $PGDATA directory.
+
 port                Port where postgres accepts connection.
+
 postgres_passwd     Password for role postgres needed to login to the database and make changes. If this
                     variable is not provided, it is expected that the auth method for the cluster is either 'trust'
                     or user 'postgres' is able to successfully login without password, if not, no modifictions are 
                     possible and tasks will soon fail.
+
 repl_and_pg_roles   Adds postgres users 'postgres' and 'replication' so they don't have to be included
                     using the 'users' list. But you could include them twice if you which, in which case,
                     the definitions of these two users inside the 'users' list takes precedence. This option
@@ -57,9 +61,15 @@ keep_running       Whether to keep the server running after configuration has fi
 
 users              A list of hashes, where each hash contains one or more of these keys: 'name', 'passwd', 'attr'.
                    (See example playbook bellow.) 
-pg_hba             Creates a new pg_hba.conf from knowledge gathered from other user options. Trust-based logins
-                   will never enabled, though if present,  manual intervention will be required to uncomment the entries.
-                   Alternatevly, set this option to 'False' to keep your pre-existing pg_hba.conf without modifications.
+
+pg_hba             Creates a new pg_hba.conf from knowledge gathered from other user options. Host-based logins
+                   via the 'trust' auth method are possible only if the cluster was originally passwordless and 
+                   no new superuser password was provided, in this case, all entries are set to 'trust' but won't
+                   take effect because they are commented out for safety.
+
+allow_trust        Don't comment out 'trust' entries in pg_hba.conf (see 'pg_hba' option), thus, we will allow 
+                   'trust' connections.
+                   
 
 
 Dependencies
@@ -77,7 +87,7 @@ Example Playbook
             - { name: ioannis,     passwd: apple,  attr: createdb    }
             - { name: nagios,      passwd: orange                    }
       roles:
-         - { role: ioannis1.pg_config, cluster: "~postgres/green", postgres_passwd="apple", pport: 5432 }
+         - { role: ioannis1.pg_config, cluster: "~postgres/green", postgres_passwd="apple", port: 5432 }
 
 
 
