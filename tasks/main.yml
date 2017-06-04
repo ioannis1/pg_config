@@ -11,6 +11,10 @@
 #   - created  databases, extensions, languages, and set privs
 #   - enabled replication via uses 'postgres' and 'replication' (see pg_hba.conf)
 
+  - template:   src="pg_hba.conf.j2"  dest=/tmp/hba.conf
+  - fail:        msg="intentional"
+
+
   - name:           fail unless ansible executing as unix user postgres
     when:           not (ansible_user_id == "postgres")
     fail:           msg="Detected ansible_user_id='{{ ansible_user_id}}'. This role must run as 'postgres'"
