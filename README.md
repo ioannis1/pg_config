@@ -10,18 +10,19 @@ Requirements
 role supports; if yours is not supported, you will need to install psycopg2 yourself before using this role.
 
  Assumptions:
-    - postmaster is already running; otherwise, an attempt will be  made to start it.
+    - postmaster is currently running; otherwise, an attempt will be  made to start it.
     - Ansible executes as unix user 'postgres'
     - cluster has been initialized and pg_hda.conf permits role 'postgres' to connect
 
  Post conditions:
-   - postmaster might be left running, depending on variable  "run_cluser" in ../default/meta.yml
-   - pg_hba.conf is updated
+   - pg_hba.conf is created or is left untouched, depending on option 'pg_hba'.
    - created postgres roles with passwords
    - created 'replication' role with password
    - added plpgsql to template1
    - created  databases, extensions, languages, and set privs
    - enabled replication for roles 'postgres' and 'replication' (see pg_hba.conf)
+   - pg_reload() the cluster after changes
+   - postmaster might be left running, depending on option  'keep_running' in ../default/meta.yml
 
 
 Role Variables
@@ -34,6 +35,7 @@ pport:               5434
 postgres_passwd:     No default exists for this variable. 
 repl_and_pg_roles:   True
 keep_running:        True
+pg_hba:              True
 
 where,
 
@@ -55,6 +57,9 @@ keep_running       Whether to keep the server running after configuration has fi
 
 users              A list of hashes, where each hash contains one or more of these keys: 'name', 'passwd', 'attr'.
                    (See example playbook bellow.) 
+pg_hba             Creates a new pg_hba.conf from knowledge gathered from other user options. Trust-based logins
+                   will never enabled, though if present,  manual intervention will be required to uncomment the entries.
+                   Alternatevly, set this option to 'False' to keep your pre-existing pg_hba.conf without modifications.
 
 
 Dependencies
