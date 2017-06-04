@@ -64,8 +64,8 @@ users              A list of hashes, where each hash contains one or more of the
 
 pg_hba             Creates a new pg_hba.conf from knowledge gathered from other user options. Host-based logins
                    via the 'trust' auth method are possible only if the cluster was originally passwordless and 
-                   no new superuser password was provided, in this case, all entries are set to 'trust' but won't
-                   take effect because they are commented out for safety.
+                   no new superuser password was provided, in this case, all entries are set to 'trust' (Adjust
+                   option 'allow_trust' to control if trust entries are commented out so they don't take effect.
 
 allow_trust        Don't comment out 'trust' entries in pg_hba.conf (see 'pg_hba' option), thus, we will allow 
                    'trust' connections.

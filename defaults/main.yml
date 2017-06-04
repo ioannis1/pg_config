@@ -4,7 +4,7 @@ port:                   5432
 keep_running:           True
 repl_and_pg_roles:      True
 pg_hba:                 True
-allow_trust             False
+allow_trust             True
 
 users:
     - { name: ioannis,     passwd: "{{postgres_passwd}}", attr: createdb    }
