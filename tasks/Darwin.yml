@@ -1,1 +1,1 @@
-      - macports:    name="py-psycopg2"       state=present
+- macports:    name="py27-psycopg2"       state=present

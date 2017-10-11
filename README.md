@@ -23,6 +23,9 @@ role supports; if yours is not supported, you will need to install psycopg2 your
    - enabled replication for roles 'postgres' and 'replication' (see pg_hba.conf)
    - pg_reload() the cluster after changes
    - postmaster might be left running, depending on option  'keep_running' in ../default/meta.yml
+   - ensure /var/log/postgresql exists
+
+
 
 
 Role Variables
