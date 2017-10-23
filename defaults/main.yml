@@ -5,6 +5,8 @@ keep_running:           True
 repl_and_pg_roles:      True
 pg_hba:                 True
 allow_trust:            True
+#changelog:              databasechangelog
+#changelog:              schema_version
 
 
 

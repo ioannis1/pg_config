@@ -1,7 +1,8 @@
 Role ioannis1.pg_config
 =========
 
-Configure a running postgres cluster. Ensures roles 'postgres', 'ioannis', and 'nagios' exist and can connect via md5 authendication. Password for  role 'postgres' is (optionally) configurable, passwords for other roles are hardcoded. Some databases and privs are created and set along with some extensions.  A new pg_hba.conf is installed, other configuration files are left untouched. 
+Configure a running postgres cluster. Ensures roles 'postgres', 'ioannis', and 'nagios' exist and can connect via md5 authendication. Password for  role 'postgres' is (optionally) configurable, passwords for other roles are hardcoded.  A new pg_hba.conf is installed, other configuration files are left untouched.  Some databases and privs are created and set along with some extensions; this assumes you are not already running Flyway or Liquibase, if you are and if the variable 'changeset' is defined, I will assume that you don't really want to touch database schemas or extensions since these are managed externally; for example, if you are using Liquibase the table 'databasechangelog' must exit
+inside the 'postgres' database'; if so, set variable 'changelog' to 'databasechangelog', If using Flyway, set variable changelog to 'schema_version' to prevent this role from configuring databases, privs, extensions, or other things  normally managed by Flyway or Liquibase.
 
 
 Requirements
@@ -19,7 +20,9 @@ role supports; if yours is not supported, you will need to install psycopg2 your
    - created postgres roles with passwords
    - created 'replication' role with password
    - added plpgsql to template1
-   - created  databases, extensions, languages, and set privs
+   - created  databases, extensions, languages, and set privsi. If var 'changelog' is defined and
+     that table name exists in inside the 'postgres' database, it means you configuring this section externally
+     and ths section is skipped. 
    - enabled replication for roles 'postgres' and 'replication' (see pg_hba.conf)
    - pg_reload() the cluster after changes
    - postmaster might be left running, depending on option  'keep_running' in ../default/meta.yml
