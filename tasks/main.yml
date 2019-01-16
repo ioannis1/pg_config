@@ -39,7 +39,7 @@
 ### Configure database if no changelog was either not defined or not found in database 'postgres'
   - name: config databases
     #when:  flyway != "0"
-    include:  databases.yml
+    import_tasks:  databases.yml
 ################################## Reload, then Stop postmaster unless user wanted otherwise
   - name:            reload {{ cluster}} 
     shell:          "pg_ctl -D {{ cluster }} reload"

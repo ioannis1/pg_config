@@ -5,14 +5,14 @@
                    - flyway != "0"
                    - postgres_passwd    is defined
                    - repl_and_pg_roles 
-    postgresql_user:  name="{{item.name}}"   role_attr_flags="{{item.attr}}"  password="{{ item.passwd |default(omit) }}"  encrypted=yes  ssl_mode="prefer"   port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host=localhost 
+    postgresql_user:  name="{{item.name}}"   role_attr_flags="{{item.attr}}"  password="{{ item.passwd |default(omit) }}"  encrypted=yes  ssl_mode="prefer"   port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host=localhost 
     with_items:
         - { name: postgres,      passwd: "{{postgres_passwd}}", attr: superuser   }
         - { name: replication,   passwd: "{{postgres_passwd}}", attr: replication }
 
   - name:             create roles 
     when:             flyway != "0"
-    postgresql_user:  name="{{item.name}}"   role_attr_flags="{{item.attr | default(omit)}}" password="{{item.passwd|default(omit)}}"  encrypted="yes"  ssl_mode="prefer"   port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host=localhost 
+    postgresql_user:  name="{{item.name}}"   role_attr_flags="{{item.attr | default(omit)}}" password="{{item.passwd|default(omit)}}"  encrypted="yes"  ssl_mode="prefer"   port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host=localhost 
     with_items: "{{  users  }}"
 
 
@@ -20,35 +20,36 @@
 ################################## template1   ######################################################################
   - name: plpgsql
     when:   flyway    != "0"
-    postgresql_lang:  db=template1  lang=plpgsql   trust=yes  state=present port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+    postgresql_lang:  db=template1  lang=plpgsql   trust=yes  state=present port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
     
 ################################### Databases  #####################################################################
   - name:   db bench
     when: flyway    != "0"
-    postgresql_db: name="bench" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+    postgresql_db: name="bench" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
 
   - name:   db ioannis
     when:   flyway    != "0"
-    postgresql_db: name="ioannis" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+    postgresql_db: name="ioannis" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
 
 ################################# Extensions  #######################################################################
   - name:     ext for database ioannis
     when:   flyway  != "0"
-    postgresql_ext:  name={{item}}  db=ioannis port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+    postgresql_ext:  name={{item}}  db=ioannis port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
     with_items:
          - pgtap
+         - file_fdw
            #- pg_stat_statements #- pg_qualstats #- pg_stat_kcache
 
 
 ################################ Privs     ###########################################################################
   - name:  privs for database postgres 
     when:  flyway != "0"
-    postgresql_privs:   db="postgres"  privs=CONNECT  type=database  roles="{{item}}" port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+    postgresql_privs:   db="postgres"  privs=CONNECT  type=database  roles="{{item}}" port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
     with_items:
         - nagios
         - ioannis
 
   - when: flyway  != "0" 
-    postgresql_privs:   db="postgres" grant_option="no"  privs="INSERT,UPDATE"  type="table" obj="ALL_IN_SCHEMA"  schema="public" roles="{{item}}"  port="{{ port }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+    postgresql_privs:   db="postgres" grant_option="no"  privs="INSERT,UPDATE"  type="table" obj="ALL_IN_SCHEMA"  schema="public" roles="{{item}}"  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
     with_items:
         - nagios
