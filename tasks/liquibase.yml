@@ -1,0 +1,23 @@
+# NOTE: We are assuming flyway is imployed
+- name:     git liquibase
+  when:     false
+  git:
+     repo: "{{ item }}"
+     dest: "/home/postgres/src/{{ item | regex_replace('^git:.*/|^http.*/|.git$','') }}"
+  with_items:
+           - https://github.com/liquibase/liquibase.git
+
+- name:         link flyway to ~/bin
+  file:         src='/home/postgres/src/flyway-command-line/flyway.sh'  dest='/home/postgres/bin/flyway'  state=link 
+  when:         false
+
+
+###################################
+- name:      make
+  make:      
+     target:   migrate      
+     chdir:    "/home/postgres/prog/flyway"
+     params:
+        port:  "{{ pport }}"
+  environment:  PATH="/home/postgres/bin:/bin:/usr/bin:/usr/local/bin"
+  when:    false

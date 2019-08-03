@@ -15,43 +15,28 @@
   with_items: "{{  users  }}"
 
 
-
-- name:   disallow "trust" in  pg_hba.conf
-  replace:
-      path:       "{{ cluster_path }}/pg_hba.conf"
-      regexp:    '\strust\s'
-      replace:   " md5\n"
-
-
 #
 ################################## template1   ######################################################################
 - name: plpgsql
   postgresql_lang:  db=template1  lang=plpgsql   trust=yes  state=present port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
     
-- name:  extensions db=template1
-  postgresql_ext:
-       #login_user:
-       #login_password:
-       login_host:  127.0.0.1
-       name:  "{{ item }}"
-       db: postgres
-       port:  "{{ pport }}"
-       #ca_cert: 'root.crt'
-  with_items:
-      - plpgsql
-
 ################################### Databases  #####################################################################
-###### db  postgres
-- name:  extensions db=postgres
-  postgresql_ext:
-     name: "{{ item }}"
-     login_host:  127.0.0.1
-     db: postgres
+- name:   db bench
+  postgresql_db: name="bench" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+
+- name:   db ioannis
+  postgresql_db: name="ioannis" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+
+################################# Extensions  #######################################################################
+- name:     ext for database ioannis
+  postgresql_ext:  name={{item}}  db=ioannis port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
   with_items:
-      - sslinfo
-      - plpgsql
-      - pg_buffercache
-        
+         - pgtap
+           #- file_fdw
+           #- pg_stat_statements #- pg_qualstats #- pg_stat_kcache
+
+
+################################ Privs     ###########################################################################
 - name:  privs for database postgres 
   postgresql_privs:   db="postgres"  privs=CONNECT  type=database  roles="{{item}}" port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
   with_items:
@@ -61,24 +46,3 @@
   postgresql_privs:   db="postgres" grant_option="no"  privs="INSERT,UPDATE"  type="table" obj="ALL_IN_SCHEMA"  schema="public" roles="{{item}}"  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
   with_items:
         - nagios
-
-###### db  bench
-- name:   db bench
-  postgresql_db: name="bench" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
-
-###### db  ioannis
-- name:   db ioannis
-  postgresql_db: name="ioannis" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
-
-################################# Extensions  #######################################################################
-- name:     ext for database ioannis
-  postgresql_ext:
-     name:  "{{ item }}"
-     db:  ioannis
-     login_host:  127.0.0.1
-  with_items:
-      - pgtap
-      #- file_fdw
-      #- pg_stat_statements #- pg_qualstats #- pg_stat_kcache
-
-################################ Privs     ###########################################################################

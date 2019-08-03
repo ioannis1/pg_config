@@ -7,6 +7,9 @@ pg_hba:                 True
 allow_trust:            True
 #changelog:              databasechangelog
 #changelog:              schema_version
+install_flyway:         False
+use_flyway:             False
+use_liquibase:          False
 
 
 

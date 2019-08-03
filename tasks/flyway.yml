@@ -1,0 +1,21 @@
+# NOTE: We are assuming flyway is imployed
+- name:     git flyway
+  when:     install_flyway
+  git:
+     repo: "{{ item }}"
+     dest: "/home/postgres/src/{{ item | regex_replace('^git:.*/|^http.*/|.git$','') }}"
+  with_items:
+           - https://github.com/pliniocsfernandes/flyway-command-line.git
+
+- name:         link flyway to ~/bin
+  file:         src='/home/postgres/src/flyway-command-line/flyway.sh'  dest='/home/postgres/bin/flyway'  state=link 
+
+
+###################################
+- name:      make
+  make:      
+     target:   migrate      
+     chdir:    "/home/postgres/prog/flyway"
+     params:
+        port:  "{{ pport }}"
+  environment:  PATH="/home/postgres/bin:/bin:/usr/bin:/usr/local/bin"

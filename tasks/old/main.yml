@@ -17,7 +17,7 @@
   fail:           msg="Detected ansible_user_id='{{ ansible_user_id}}'. This role must run as 'postgres'"
 
 - name:           ensure postmaster is running 
-  shell:          ~postgres/dist-pg/bin/pg_ctl -D {{ cluster_path }} -o '-c ssl=off'  start
+  shell:          "pg_ctl -D {{ cluster_path }} start"
   ignore_errors:  yes
   environment:  
           PATH:     "{{ ansible_env.PATH }}:/Users/postgres/dist-pg/bin:/home/postgres/dist-pg/bin:/usr/bin"
@@ -25,26 +25,22 @@
 #############################################################################################
 - name:          under Flyway?  
   shell:         psql -h localhost -U postgres -p 5434 -d postgres -c 'table "{{ changelog }}"'  > /dev/null
-  when:          
-      - changelog is defined
-      - false
+  when:          changelog is defined
   environment:
           PATH:     "{{ ansible_env.PATH }}:/Users/postgres/dist-pg/bin:/home/postgres/dist-pg/bin:/usr/bin"
   register:      result
   ignore_errors:  yes
 
+- set_fact:      flyway="1"
+
+- set_fact:      flyway="{{ result.rc }}"
+  when:          changelog is defined
+    #
 ### Configure database if no changelog was either not defined or not found in database 'postgres'
 - name:          config databases
-  when:          not ( use_flyway or use_liquibase)
+  when:          flyway != "0"
   import_tasks:  databases.yml
 
-- name:          flyway
-  when:          use_flyway 
-  import_tasks:  flyway.yml
-
-- name:          liquibase
-  when:          use_liquibase
-  import_tasks:  liquibase.yml
 ################################## Reload, then Stop postmaster unless user wanted otherwise
 - name:            reload {{ cluster_name }} 
   shell:          "pg_ctl -D {{ cluster_path  }} reload"
