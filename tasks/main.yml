@@ -42,9 +42,9 @@
   when:          use_flyway 
   import_tasks:  flyway.yml
 
-- name:          liquibase
-  when:          use_liquibase
-  import_tasks:  liquibase.yml
+  #- name:          liquibase
+  #when:          use_liquibase
+  #  import_tasks:  liquibase.yml
 ################################## Reload, then Stop postmaster unless user wanted otherwise
 - name:            reload {{ cluster_name }} 
   shell:          "pg_ctl -D {{ cluster_path  }} reload"

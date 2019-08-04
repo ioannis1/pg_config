@@ -40,6 +40,17 @@
   with_items:
       - plpgsql
 
+################################# Extensions  #######################################################################
+- name:     ext for database ioannis
+  postgresql_ext:
+     name:  "{{ item }}"
+     db:  ioannis
+     login_host:  127.0.0.1
+  with_items:
+      - pgtap
+      #- file_fdw
+      #- pg_stat_statements #- pg_qualstats #- pg_stat_kcache
+
 ################################### Databases  #####################################################################
 ###### db  postgres
 - name:  extensions db=postgres
@@ -70,15 +81,9 @@
 - name:   db ioannis
   postgresql_db: name="ioannis" owner="ioannis" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
 
-################################# Extensions  #######################################################################
-- name:     ext for database ioannis
-  postgresql_ext:
-     name:  "{{ item }}"
-     db:  ioannis
-     login_host:  127.0.0.1
-  with_items:
-      - pgtap
-      #- file_fdw
-      #- pg_stat_statements #- pg_qualstats #- pg_stat_kcache
+###### db  timescaledb
+- name:          import timescaledb
+  when:          db_timescaledb
+  import_tasks:  db_timescaledb.yml
 
 ################################ Privs     ###########################################################################

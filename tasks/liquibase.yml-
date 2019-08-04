@@ -1,4 +1,4 @@
-# NOTE: We are assuming flyway is imployed
+# NOTE: We are assuming liquibase is imployed
 - name:     git liquibase
   when:     false
   git:
@@ -13,10 +13,10 @@
 
 
 ###################################
-- name:      make
+- name:      make upgrade
   make:      
-     target:   migrate      
-     chdir:    "/home/postgres/prog/flyway"
+     target:   upgrade
+     chdir:    "/home/postgres/prog/liquibase"
      params:
         port:  "{{ pport }}"
   environment:  PATH="/home/postgres/bin:/bin:/usr/bin:/usr/local/bin"

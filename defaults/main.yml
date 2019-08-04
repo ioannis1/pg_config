@@ -8,6 +8,7 @@ allow_trust:            True
 #changelog:              databasechangelog
 #changelog:              schema_version
 install_flyway:         False
+db_timescaledb:         False
 use_flyway:             False
 use_liquibase:          False
 

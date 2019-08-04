@@ -1,0 +1,33 @@
+########### Is extenstion timescaledb installed?
+- stat:      path="{{ ansible_env.HOME }}/dist-pg/share/extension/timescaledb.control"
+  register:  ts_control
+
+
+###### db  timescaledb
+
+- name:         cp timescaledb.dump
+  copy: 	src="timescaledb.dump"   dest="/tmp/timescaledb.dump"  owner=postgres mode=0600
+
+
+- name:         db timescaledb
+  command:      pg_restore -C -d postgres /tmp/timescaledb.dump
+  environment:
+      PATH:    "{{ ansible_env.HOME }}/dist-pg/bin:/usr/bin:/usr/local/bin:{{ansible_env.PATH}}"
+
+- name:         db timescaledb   search_path ;
+  command:      psql -X -d timescaledb -p {{pport}} -c 'ALTER DATABASE timescaledb SET search_path to public,scale'
+  environment:
+      PATH:    "{{ ansible_env.HOME }}/dist-pg/bin:/usr/bin:/usr/local/bin:{{ansible_env.PATH}}"
+
+- name:         db tiemescaledb  create hypertables
+  command:      "{{ ansible_env.HOME }}/admin/timescaledb/create_hypertables -p {{ pport }} -f"
+  when:         
+       -        ts_control.stat.exists
+       -        true
+  environment:
+      PATH:    "{{ ansible_env.HOME }}/dist-pg/bin:/usr/bin:/usr/local/bin:{{ansible_env.PATH}}"
+
+- name:         rm -f /tmp/timescaledb.dump
+  file:         path='/tmp/timescaledb.dump'  state='absent'
+
+################################ Privs     ###########################################################################
