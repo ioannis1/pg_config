@@ -19,6 +19,17 @@
   environment:
       PATH:    "{{ ansible_env.HOME }}/dist-pg/bin:/usr/bin:/usr/local/bin:{{ansible_env.PATH}}"
 
+- name:  ext db=timescaledb
+  postgresql_ext:
+       login_host:  127.0.0.1
+       name:         "{{ item }}"
+       db:           timescaledb
+       port:        "{{ pport }}"
+       #ca_cert: 'root.crt'
+  when:              ts_control.stat.exists
+  with_items:
+      - timescaledb
+
 - name:         db tiemescaledb  create hypertables
   command:      "{{ ansible_env.HOME }}/admin/timescaledb/create_hypertables -p {{ pport }} -f"
   when:         
