@@ -54,6 +54,9 @@
       - sslinfo
       - plpgsql
       - pg_buffercache
+      - pg_stat_statements
+      - postgres_fdw
+        #- pg_prometheus
         
 - name:  privs for db postgres 
   postgresql_privs:   db="postgres"  privs=CONNECT  type=database  roles="{{item}}" port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
