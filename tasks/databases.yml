@@ -6,12 +6,15 @@
 
 - name:          ioannis.yml
   import_tasks:  db/ioannis.yml
+  when:          minimal
 
 - name:          bench.yml
   import_tasks:  db/bench.yml
 
 - name:          ts.yml
   import_tasks:  db/ts.yml
+  when:          not minimal
 
 - name:          timescaledb.yml
   import_tasks:  db/timescaledb.yml
+  when:          not minimal

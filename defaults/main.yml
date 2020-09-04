@@ -10,6 +10,7 @@ allow_trust:            True
 install_flyway:         False
 db_timescaledb:         False
 use_flyway:             False
+minimal:                false
 use_liquibase:          False
 
 
