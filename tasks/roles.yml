@@ -1,0 +1,27 @@
+############################### Roles  ##############################################################################
+# NOTE: only for Manuyal Configurations
+# NOTE: We are assuming flyway is not imployed
+
+- name:            create postgres and replication
+  when:             
+                   - postgres_passwd    is defined
+                   - repl_and_pg_roles 
+  postgresql_user:  name="{{item.name}}"   role_attr_flags="{{item.attr}}"  password="{{ item.passwd |default(omit) }}"  encrypted=yes  ssl_mode="prefer"   port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host=localhost 
+  with_items:
+        - { name: postgres,      passwd: "{{postgres_passwd}}", attr: superuser   }
+        - { name: replication,   passwd: "{{postgres_passwd}}", attr: replication }
+
+- name:             create roles, as per HASH 'users'
+  postgresql_user:  name="{{item.name}}"   role_attr_flags="{{item.attr | default(omit)}}" password="{{item.passwd|default(omit)}}"  encrypted="yes"  ssl_mode="prefer"   port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host=localhost 
+  with_items: "{{  users  }}"
+
+
+
+- name:   disallow "trust" in  pg_hba.conf
+  replace:
+      path:       "{{ cluster_path }}/pg_hba.conf"
+      regexp:    '\strust\s'
+      replace:   " md5\n"
+
+
+#

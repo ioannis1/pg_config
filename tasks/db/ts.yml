@@ -1,0 +1,22 @@
+########### Is extenstion timescaledb installed?
+- stat:      path="{{ ansible_env.HOME }}/dist-pg/share/extension/timescaledb.control"
+  register:  ts_control
+
+- name:  timescaledb.control exists
+  assert: 
+     that:          ts_control.stat.exists
+     fail_msg:      msg="timescaledb.control  not found"
+
+###### db  ts
+
+- name:   db ts
+  postgresql_db: name="ts" owner="prometheus" encoding="UTF-8" lc_collate="en_US.UTF-8"  template=template0  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+
+- name:     ext for database ts
+  postgresql_ext:
+     name:  "{{ item }}"
+     db:  ioannis
+     login_host:  127.0.0.1
+  with_items:
+      - pg_prometheus
+      - timescaledb

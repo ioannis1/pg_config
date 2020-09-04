@@ -22,7 +22,7 @@
   environment:  
           PATH:     "{{ ansible_env.PATH }}:/Users/postgres/dist-pg/bin:/home/postgres/dist-pg/bin:/usr/bin"
 
-#############################################################################################
+########################################################## Decide on Liquibqse, Flyway, or Manual
 - name:          under Flyway?  
   shell:         psql -h localhost -U postgres -p 5434 -d postgres -c 'table "{{ changelog }}"'  > /dev/null
   when:          
@@ -34,9 +34,9 @@
   ignore_errors:  yes
 
 ### Configure database if no changelog was either not defined or not found in database 'postgres'
-- name:          config databases
+- name:          manual config
   when:          not ( use_flyway or use_liquibase)
-  import_tasks:  databases.yml
+  import_tasks:  manual.yml
 
 - name:          flyway
   when:          use_flyway 

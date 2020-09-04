@@ -17,6 +17,8 @@ use_liquibase:          False
 users:
     - { name: ioannis,     passwd: "{{postgres_passwd}}", attr: createdb    }
     - { name: nagios,      passwd: "{{postgres_passwd}}"                    }
+    - { name: prometheus,  passwd: "{{postgres_passwd}}"                    }
+    - { name: grafana,     passwd: "{{postgres_passwd}}"                    }
 
 postgres_passwd:     !vault |
          $ANSIBLE_VAULT;1.1;AES256

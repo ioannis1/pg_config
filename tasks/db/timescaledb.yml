@@ -2,6 +2,12 @@
 - stat:      path="{{ ansible_env.HOME }}/dist-pg/share/extension/timescaledb.control"
   register:  ts_control
 
+- name:  timescaledb.control exists
+  assert: 
+     that:          ts_control.stat.exists
+     fail_msg:      msg="timescaledb.control  not found"
+
+
 
 ###### db  timescaledb
 
@@ -9,8 +15,9 @@
   copy: 	src="timescaledb.dump"   dest="/tmp/timescaledb.dump"  owner=postgres mode=0600
 
 
-- name:         db timescaledb
-  command:      pg_restore -C -d postgres /tmp/timescaledb.dump
+- name:           db timescaledb
+  ignore_errors:  yes
+  command:        pg_restore -C -d postgres /tmp/timescaledb.dump  -p "{{ pport }}"
   environment:
       PATH:    "{{ ansible_env.HOME }}/dist-pg/bin:/usr/bin:/usr/local/bin:{{ansible_env.PATH}}"
 

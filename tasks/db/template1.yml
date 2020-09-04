@@ -1,0 +1,18 @@
+################################## template1   ######################################################################
+- name: plpgsql
+  postgresql_lang:  db=template1  lang=plpgsql   trust=yes  state=present port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+    
+- name:  extensions db=template1
+  postgresql_ext:
+       #login_user:
+       #login_password:
+       login_host:  127.0.0.1
+       name:  "{{ item }}"
+       db: postgres
+       port:  "{{ pport }}"
+       #ca_cert: 'root.crt'
+  with_items:
+      - plpgsql
+
+################################# Extensions  #######################################################################
+################################### Databases  #####################################################################
