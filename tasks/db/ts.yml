@@ -16,7 +16,24 @@
   postgresql_ext:
      name:  "{{ item }}"
      db:  ioannis
-     login_host:  127.0.0.1
+     login_host:  localhost
+     port:  "{{ pport }}"
   with_items:
-      - pg_prometheus
-      - timescaledb
+      #- pg_prometheus
+      #- timescaledb
+      - sslinfo
+      - plpgsql
+      - pg_buffercache
+      - pg_stat_statements
+        #- postgres_fdw
+        
+- name:  privs for db postgres 
+  postgresql_privs:   db="postgres"  privs=CONNECT  type=database  roles="{{item}}" port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+  with_items:
+        - nagios
+        - ioannis
+
+- postgresql_privs:   db="postgres" grant_option="no"  privs="INSERT,UPDATE"  type="table" obj="ALL_IN_SCHEMA"  schema="public" roles="{{item}}"  port="{{ pport }}" login_password="{{postgres_passwd|default(omit)}}"  login_host="localhost"
+  with_items:
+        - nagios
+

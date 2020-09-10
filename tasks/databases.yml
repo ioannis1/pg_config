@@ -6,7 +6,8 @@
 
 - name:          ioannis.yml
   import_tasks:  db/ioannis.yml
-  when:          minimal
+  when:      
+     -  minimal
 
 - name:          bench.yml
   import_tasks:  db/bench.yml

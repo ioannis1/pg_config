@@ -6,7 +6,7 @@
   postgresql_ext:
        #login_user:
        #login_password:
-       login_host:  127.0.0.1
+       login_host:  localhost
        name:  "{{ item }}"
        db: postgres
        port:  "{{ pport }}"

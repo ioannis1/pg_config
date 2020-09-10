@@ -28,7 +28,7 @@
 
 - name:  ext db=timescaledb
   postgresql_ext:
-       login_host:  127.0.0.1
+       login_host:   localhost
        name:         "{{ item }}"
        db:           timescaledb
        port:        "{{ pport }}"
