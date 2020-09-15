@@ -7,6 +7,6 @@ psql -Xq -d postgres  -U postgres  -h $HOSTNAME  -p $PPORT  <<eom
 eom
 
 psql -1Xq -d ts -U postgres -h $HOSTNAME -p $PPORT <<eom
-      #CREATE EXTENSION IF NOT EXISTS pg_stat_statements ;
+      CREATE EXTENSION IF NOT EXISTS pg_stat_statements ;
 eom
 
