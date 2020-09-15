@@ -6,7 +6,7 @@ psql -Xq -d postgres  -U postgres  -h $HOSTNAME  -p $PPORT  <<eom
       CREATE DATABASE ioannis OWNER ioannis;
 eom
 
-psql -Xq -d ioannis -U postgres <<eom
+psql -Xq -d ioannis -U postgres  -h $HOSTNAME -p $PPORT <<eom
       CREATE EXTENSION IF NOT EXISTS pgtap ;
 eom
 

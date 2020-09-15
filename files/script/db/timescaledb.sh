@@ -6,7 +6,7 @@ psql -Xq -d postgres  -U postgres  -h $HOSTNAME  -p $PPORT  <<eom
       CREATE DATABASE timescaledb OWNER prometheus;
 eom
 
-#psql -1Xq -d timescaledb -U postgres <<eom
+#psql -1Xq -d timescaledb -U postgres -h $HOSTNAME -p $PPORT  <<eom
       #CREATE EXTENSION IF NOT EXISTS pgtap ;
 #eom
 
