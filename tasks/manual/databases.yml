@@ -1,30 +1,25 @@
 
-- name:         template1
-  script:       script/db/template1.sh
+- name:         database "template1"
+  script:       script/db/template1.sh   localhost   "{{ pport }}"
   environment:  
-      - PGPORT:  "{{ pport }}"
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
 
-- name:         ioannis
-  script:       script/db/ioannis.sh
+- name:         database "ioannis"
+  script:       script/db/ioannis.sh   localhost   "{{ pport }}"
   environment:  
-      - PGPORT:  "{{ pport }}"
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
 
-- name:         bench
-  script:       script/db/bench.sh
+- include:      db/ts.yml         
+  #when:         not minimal
+
+- name:         database "bench"
+  script:       script/db/bench.sh   localhost   "{{ pport }}"
+  when:         not minimal
   environment:  
-      - PGPORT:  "{{ pport }}"
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
 
-- name:         ts
-  script:       script/db/ts.sh
+- name:         database "timescaledb"
+  when:         not minimal
+  script:       script/db/timescaledb.sh   localhost   "{{ pport }}"
   environment:  
-      - PGPORT:  "{{ pport }}"
-      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
-
-- name:         timescaledb
-  script:       script/db/timescaledb.sh
-  environment:  
-      - PGPORT:  "{{ pport }}"
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"

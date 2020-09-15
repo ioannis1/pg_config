@@ -1,19 +1,29 @@
 #/dist-pg/bin/psql -1Xq postgres postgres <<eom
-psql -1Xq postgres postgres <<eom
+HOSTNAME=$1
+PPORT=$2
+
+psql -Xq -d postgres -U postgres -h $HOSTNAME -p $PPORT  <<eom
 
 
-DROP ROLE  IF EXISTS  ioannis       ;
-DROP ROLE  IF EXISTS  prometheus    ;
-DROP ROLE  IF EXISTS  read_only     ;
-DROP ROLE  IF EXISTS  replication   ;
 
 
 ALTER ROLE postgres password 'silver';
 
-CREATE USER  ioannis       password    'silver';
-CREATE USER  prometheus    password    'silver';
-CREATE USER  read_only     password    'silver';
-CREATE USER  replication   password    'silver';
+DROP ROLE  IF EXISTS  ioannis                      ;
+CREATE USER  ioannis                               ;   
+ALTER ROLE ioannis  CREATEDB  password    'silver' ;
+
+DROP ROLE  IF EXISTS  prometheus              ;
+CREATE USER  prometheus                       ;   
+ALTER  ROLE  prometheus  password    'silver' ;
+
+DROP ROLE  IF EXISTS  read_only               ;
+CREATE USER  read_only                        ; 
+ALTER ROLE   read_only  password    'silver'  ;
+
+DROP ROLE  IF EXISTS  replication            ;
+CREATE USER  replication                     ; 
+ALTER ROLE replication  password    'silver' ;
 
 eom
 

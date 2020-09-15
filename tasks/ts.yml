@@ -1,0 +1,12 @@
+
+- name:         ls.sh
+  script:       script/db/ts/ls.sh   localhost   "{{ pport }}"
+  environment:  
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
+- name:         pg_stat_statments.sh
+  when:         fasle
+  script:       script/db/ts/pg_stat_statements.sh   localhost   "{{ pport }}"
+  environment:  
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
