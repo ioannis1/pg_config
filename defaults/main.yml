@@ -1,5 +1,6 @@
 ---
 cluster_path:           ~postgres/green
+postgres_REL:           REL_11_4
 pport:                  5432
 keep_running:           True
 repl_and_pg_roles:      True
@@ -7,11 +8,10 @@ pg_hba:                 True
 allow_trust:            True
 #changelog:              databasechangelog
 #changelog:              schema_version
-install_flyway:         False
 db_timescaledb:         False
-use_flyway:             False
 minimal:                false
 use_liquibase:          False
+method:                 manual     # flyway, liquibase, or manual
 
 
 

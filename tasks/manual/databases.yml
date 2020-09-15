@@ -1,0 +1,30 @@
+
+- name:         template1
+  script:       script/db/template1.sh
+  environment:  
+      - PGPORT:  "{{ pport }}"
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
+- name:         ioannis
+  script:       script/db/ioannis.sh
+  environment:  
+      - PGPORT:  "{{ pport }}"
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
+- name:         bench
+  script:       script/db/bench.sh
+  environment:  
+      - PGPORT:  "{{ pport }}"
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
+- name:         ts
+  script:       script/db/ts.sh
+  environment:  
+      - PGPORT:  "{{ pport }}"
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
+- name:         timescaledb
+  script:       script/db/timescaledb.sh
+  environment:  
+      - PGPORT:  "{{ pport }}"
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"

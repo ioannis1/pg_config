@@ -1,0 +1,9 @@
+
+- name:         create roles
+  become_user:  postgres
+  become:       yes
+  script:       script/roles.sh
+  environment:  
+      - PGPORT:  "{{ pport }}"
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+

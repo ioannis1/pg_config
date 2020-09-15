@@ -1,0 +1,6 @@
+- name:          roles
+  import_tasks:  psycopg2/roles.yml
+
+- name:          databases
+  import_tasks:  psycopg2/databases.yml
+

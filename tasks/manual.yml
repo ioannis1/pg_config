@@ -1,6 +1,15 @@
-- name:          roles.yml
-  import_tasks:  roles.yml
 
-- name:          databases.yml
-  import_tasks:  databases.yml
+- name:       roles
+  include:    manual/roles.yml
+
+- name:       databases
+  include:    manual/databases.yml
+
+- name:   disallow "trust" in  pg_hba.conf
+  when:   false
+  replace:
+      path:       "{{ cluster_path }}/pg_hba.conf"
+      regexp:    '\strust\s'
+      replace:   " md5\n"
+
 
