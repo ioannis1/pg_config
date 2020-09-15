@@ -25,5 +25,7 @@ DROP ROLE  IF EXISTS  replication            ;
 CREATE USER  replication                     ; 
 ALTER ROLE replication  password    'silver' ;
 
+GRANT  pg_monitor           TO prometheus     ;
+--GRANT  pg_read_server_files TO prometheus   ;
 eom
 

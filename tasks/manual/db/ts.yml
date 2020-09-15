@@ -8,7 +8,14 @@
   environment:  
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
 
+- name:         lslog.sh
+  when:         false
+  script:       script/db/ts/lslog.sh   localhost   "{{ pport }}"
+  environment:  
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
 - name:         pg_stat_statments.sh
+  when:         false
   script:       script/db/ts/pg_stat_statements.sh   localhost   "{{ pport }}"
   environment:  
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
