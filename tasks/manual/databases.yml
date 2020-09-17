@@ -4,6 +4,11 @@
   environment:  
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
 
+- name:         database "postgres"
+  script:       script/db/postgres.sh   localhost   "{{ pport }}"
+  environment:  
+      - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
+
 - name:         database "ioannis"
   script:       script/db/ioannis.sh   localhost   "{{ pport }}"
   environment:  
