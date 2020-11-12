@@ -1,5 +1,5 @@
 - name:         database "ts"
-  script:       script/db/ts.sh   localhost   "{{ pport }}"
+  script:       script/db/ts.sh   localhost   "{{ pport }}"   "{{ pgbouncer_passwd }}"
   environment:  
       - PATH:    "/home/postgres/dist-pg/bin:/bin:/usr/bin:/usr/local/bin"
 
